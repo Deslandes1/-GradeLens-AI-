@@ -1,6 +1,6 @@
 # app.py
 # =============================================================================
-# GRADELENS AI v4 — Real AI Vision Grading
+# GRADELENS AI v4 — Real AI Vision Grading · Light Blue Theme
 # Built by Gesner Deslandes · Software Engineer
 # Contact Info : (509)-47385663 · Email : deslandes78@gmail.com
 #
@@ -28,26 +28,50 @@ st.set_page_config(
 )
 
 # -----------------------------------------------------------------------------
-# GLOBAL CSS
+# GLOBAL CSS — LIGHT BLUE THEME
 # -----------------------------------------------------------------------------
 CSS = """
 <style>
+  /* ===== PAGE BACKGROUND ===== */
   .stApp {
     background:
-      radial-gradient(1200px 700px at 50% -10%, rgba(0,229,255,.10), transparent 65%),
-      radial-gradient(900px 600px at 10% 110%, rgba(255,217,59,.05), transparent 60%),
-      radial-gradient(900px 600px at 90% 110%, rgba(168,107,255,.05), transparent 60%),
-      #05070c !important;
-    color: #d8e4f0;
+      radial-gradient(1200px 700px at 50% -10%, rgba(255,255,255,.85), transparent 65%),
+      radial-gradient(900px 600px at 10% 110%, rgba(180,220,255,.55), transparent 60%),
+      radial-gradient(900px 600px at 90% 110%, rgba(200,230,255,.50), transparent 60%),
+      #d4eaff !important;
+    color: #0a2540;
   }
+  .stApp, .stApp p, .stApp span, .stApp label, .stApp div,
+  .stMarkdown, .stText, .stCaption, .stAlert {
+    color: #0a2540 !important;
+  }
+  .stApp h1, .stApp h2, .stApp h3, .stApp h4, .stApp h5, .stApp h6 {
+    color: #06357a !important;
+  }
+  .stApp .stCaption, .stApp small {
+    color: #35608f !important;
+  }
+  section[data-testid="stSidebar"] {
+    background: linear-gradient(180deg, #eaf4ff, #cfe6ff) !important;
+    border-right: 2px solid #9cc8ff !important;
+  }
+  section[data-testid="stSidebar"] * {
+    color: #0a2540 !important;
+  }
+  details summary {
+    color: #06357a !important;
+    font-weight: 800 !important;
+  }
+
+  /* ===== HEADER ===== */
   .gl-header {
     padding: 22px 20px 18px;
     border-radius: 20px;
     background:
-      radial-gradient(1000px 300px at 50% 0%, rgba(255,217,59,.18), transparent 70%),
-      linear-gradient(180deg, rgba(24,18,6,.98), rgba(8,6,3,.98));
-    border: 3px solid #ffd93b;
-    box-shadow: 0 20px 60px rgba(0,0,0,.9), 0 0 60px rgba(255,217,59,.20);
+      radial-gradient(1000px 300px at 50% 0%, rgba(255,255,255,.9), transparent 70%),
+      linear-gradient(180deg, #eaf4ff, #cfe6ff);
+    border: 3px solid #3aa0ff;
+    box-shadow: 0 20px 60px rgba(58,160,255,.25), 0 0 40px rgba(58,160,255,.15);
     text-align: center; margin-bottom: 18px;
     position: relative; overflow: hidden;
   }
@@ -55,67 +79,77 @@ CSS = """
     font-family: Georgia, serif;
     font-size: clamp(1.5rem, 5vw, 2.3rem);
     font-weight: 900; letter-spacing: 6px;
-    background: linear-gradient(90deg,#ffd93b,#ff8a2b,#ffd93b,#a86bff,#ffd93b);
+    background: linear-gradient(90deg,#06357a,#1060a0,#06357a,#3a6bd0,#06357a);
     background-size: 200% 100%;
     -webkit-background-clip: text; background-clip: text; color: transparent;
     margin: 0 0 6px;
   }
   .gl-tagline {
     font-size: .72rem; font-weight: 900; letter-spacing: 3px;
-    color: #ffe680; text-transform: uppercase; margin-bottom: 12px;
+    color: #1060a0; text-transform: uppercase; margin-bottom: 12px;
   }
   .gl-credit {
     font-family: Georgia, serif; font-size: .82rem; font-weight: 900;
-    letter-spacing: 1.4px; color: #ffd93b;
+    letter-spacing: 1.4px; color: #06357a;
   }
   .gl-credit small {
     display: block; font-family: 'Courier New', monospace;
-    font-size: .7rem; color: #6b7c92; letter-spacing: 1.2px;
+    font-size: .7rem; color: #35608f; letter-spacing: 1.2px;
     margin-top: 4px; font-weight: 800;
   }
-  .gl-credit a { color: #00e5ff; text-decoration: none; border-bottom: 1px dotted #00e5ff; }
+  .gl-credit a {
+    color: #1060a0; text-decoration: none;
+    border-bottom: 1px dotted #1060a0;
+  }
+  .gl-credit a:hover { color: #06357a; }
 
+  /* ===== CARDS ===== */
   .gl-card {
     padding: 18px 20px; border-radius: 16px;
-    background: linear-gradient(180deg, rgba(8,14,22,.98), rgba(4,7,12,.98));
-    border: 2px solid #1c2636;
-    box-shadow: 0 14px 36px rgba(0,0,0,.65);
+    background: linear-gradient(180deg, #ffffff, #eef6ff);
+    border: 2px solid #9cc8ff;
+    box-shadow: 0 14px 36px rgba(58,160,255,.18);
     margin-bottom: 16px;
   }
   .gl-card-title {
     font-family: 'Courier New', monospace; font-size: .72rem;
     font-weight: 900; letter-spacing: 2.2px; text-transform: uppercase;
-    color: #00e5ff; margin-bottom: 12px; padding-bottom: 10px;
-    border-bottom: 1.5px solid rgba(0,229,255,.16);
+    color: #1060a0; margin-bottom: 12px; padding-bottom: 10px;
+    border-bottom: 1.5px solid rgba(16,96,160,.25);
   }
+
+  /* ===== MESSAGE BOXES ===== */
   .gl-warn {
     padding: 12px 14px; border-radius: 10px;
-    background: rgba(255,176,32,.08);
-    border: 1.5px solid rgba(255,176,32,.4);
-    color: #ffd9a0;
+    background: rgba(255,176,32,.14);
+    border: 1.5px solid rgba(214,136,0,.55);
+    color: #6b4400;
     font-family: 'Courier New', monospace;
     font-size: .78rem; line-height: 1.7; margin-bottom: 12px;
   }
   .gl-tip {
     padding: 12px 14px; border-radius: 10px;
-    background: rgba(0,229,255,.06);
-    border: 1.5px solid rgba(0,229,255,.35);
-    color: #b4f2ff;
+    background: rgba(58,160,255,.10);
+    border: 1.5px solid rgba(58,160,255,.5);
+    color: #06357a;
     font-family: 'Courier New', monospace;
     font-size: .78rem; line-height: 1.7; margin-bottom: 12px;
   }
   .gl-ok {
     padding: 12px 14px; border-radius: 10px;
-    background: rgba(34,255,136,.08);
-    border: 1.5px solid rgba(34,255,136,.4);
-    color: #a8ffd0;
+    background: rgba(34,180,100,.14);
+    border: 1.5px solid rgba(20,150,80,.55);
+    color: #0a4b26;
     font-family: 'Courier New', monospace;
     font-size: .78rem; line-height: 1.7; margin-bottom: 12px;
   }
+
+  /* ===== AI PANEL ===== */
   .gl-ai-box {
     padding: 16px; border-radius: 14px;
-    background: linear-gradient(180deg, rgba(168,107,255,.10), rgba(168,107,255,.02));
-    border: 2px solid rgba(168,107,255,.4); margin-bottom: 14px;
+    background: linear-gradient(180deg, #ede5ff, #ddd0f7);
+    border: 2px solid #9a72d9;
+    margin-bottom: 14px;
   }
   .gl-ai-head { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
   .gl-ai-avatar {
@@ -123,33 +157,35 @@ CSS = """
     display: grid; place-items: center; font-size: 1.3rem;
     background: linear-gradient(135deg,#a86bff,#5a2a9a);
     border: 3px solid #d8baff;
-    box-shadow: 0 0 22px rgba(168,107,255,.6);
+    box-shadow: 0 0 22px rgba(168,107,255,.5);
     flex: 0 0 auto;
   }
   .gl-ai-name {
     font-family: Georgia, serif; font-size: 1rem;
-    font-weight: 900; letter-spacing: 1.2px; color: #d8baff;
+    font-weight: 900; letter-spacing: 1.2px; color: #4a1d8a;
   }
   .gl-ai-role {
     font-family: 'Courier New', monospace; font-size: .64rem;
     letter-spacing: 1.4px; text-transform: uppercase;
-    color: #6b7c92; margin-top: 2px;
+    color: #6a5a8a; margin-top: 2px;
   }
   .gl-ai-line {
     font-size: .88rem; line-height: 1.7;
-    margin-bottom: 8px; color: #e8ddff;
+    margin-bottom: 8px; color: #2a1a50;
   }
+  .gl-ai-line b { color: #4a1d8a; }
+
   .gl-score-card {
     display: flex; align-items: center; justify-content: space-between;
     gap: 10px; padding: 14px 16px; border-radius: 12px;
-    background: rgba(3,6,12,.9);
-    border: 2px solid rgba(255,217,59,.4);
+    background: #ffffff;
+    border: 2px solid #ffb020;
     margin-top: 12px;
   }
   .gl-score-num {
     font-family: 'Courier New', monospace; font-size: 2rem;
-    font-weight: 900; color: #ffd93b;
-    text-shadow: 0 0 12px rgba(255,217,59,.5);
+    font-weight: 900; color: #b06f00;
+    text-shadow: 0 0 12px rgba(255,176,32,.4);
   }
   .gl-score-label {
     font-family: 'Courier New', monospace; font-size: .68rem;
@@ -158,82 +194,145 @@ CSS = """
   }
   .gl-confidence {
     font-family: 'Courier New', monospace; font-size: 1.2rem;
-    font-weight: 900; color: #22ff88;
+    font-weight: 900; color: #0a8f4a;
   }
+
+  /* ===== FINAL GRADE BOX ===== */
   .gl-final-box {
     padding: 20px; border-radius: 14px;
-    background: linear-gradient(180deg, rgba(255,217,59,.12), rgba(255,217,59,.02));
-    border: 2px solid rgba(255,217,59,.6);
+    background: linear-gradient(180deg, #fff5c4, #ffe89a);
+    border: 2px solid #d6a300;
     text-align: center; margin: 14px 0;
   }
   .gl-final-label {
     font-family: 'Courier New', monospace; font-size: .72rem;
     letter-spacing: 2px; text-transform: uppercase;
-    color: #ffe680; margin-bottom: 6px;
+    color: #6b4400; margin-bottom: 6px;
   }
   .gl-final-value {
     font-family: Georgia, serif; font-size: 2.4rem;
-    font-weight: 900; color: #ffd93b;
-    text-shadow: 0 0 20px rgba(255,217,59,.6);
+    font-weight: 900; color: #b06f00;
+    text-shadow: 0 0 20px rgba(255,176,32,.5);
   }
+
+  /* ===== SAVED GRADE NOTE ===== */
   .gl-note {
     padding: 14px 16px; border-radius: 12px;
-    background: rgba(34,255,136,.06);
-    border: 1.5px solid rgba(34,255,136,.4);
-    color: #a8ffd0;
+    background: rgba(34,180,100,.10);
+    border: 1.5px solid rgba(20,150,80,.45);
+    color: #0a4b26;
     font-family: 'Courier New', monospace;
     font-size: .82rem; line-height: 1.75;
     white-space: pre-wrap; margin-top: 12px;
   }
+
+  /* ===== PER-QUESTION BREAKDOWN ===== */
   .gl-q-row {
     padding: 10px 12px; border-radius: 10px;
-    background: rgba(3,6,12,.75);
-    border-left: 4px solid #00e5ff;
+    background: #ffffff;
+    border-left: 4px solid #3aa0ff;
     margin-bottom: 8px;
     font-size: .84rem;
     line-height: 1.6;
+    color: #0a2540;
   }
-  .gl-q-row.ok  { border-left-color: #22ff88; }
-  .gl-q-row.bad { border-left-color: #ff3b30; }
+  .gl-q-row.ok  { border-left-color: #14a860; }
+  .gl-q-row.bad { border-left-color: #e03a30; }
+
+  /* ===== FOOTER ===== */
   .gl-footer {
     margin-top: 24px; padding: 18px; border-radius: 14px;
     text-align: center;
-    background: linear-gradient(180deg, rgba(8,14,22,.98), rgba(4,7,12,.98));
-    border: 2px solid #1c2636;
+    background: linear-gradient(180deg, #ffffff, #e6f1ff);
+    border: 2px solid #9cc8ff;
     font-family: 'Courier New', monospace;
-    font-size: .72rem; color: #6b7c92;
+    font-size: .72rem; color: #35608f;
     letter-spacing: 1.4px; line-height: 2;
   }
-  .gl-footer strong { color: #ffd93b; letter-spacing: 2px; }
-  .gl-footer a { color: #00e5ff; text-decoration: none; border-bottom: 1px dotted #00e5ff; }
+  .gl-footer strong { color: #06357a; letter-spacing: 2px; }
+  .gl-footer a {
+    color: #1060a0; text-decoration: none;
+    border-bottom: 1px dotted #1060a0;
+  }
+
+  /* ===== BUTTONS ===== */
   div[data-testid="stButton"] > button {
     border-radius: 11px; font-weight: 900;
-    letter-spacing: 1.2px; padding: 10px 16px; transition: all .15s;
+    letter-spacing: 1.2px; padding: 10px 16px;
+    background: linear-gradient(180deg, #eaf4ff, #cfe6ff) !important;
+    color: #06357a !important;
+    border: 2px solid #3aa0ff !important;
+    transition: all .15s;
   }
   div[data-testid="stButton"] > button:hover {
     transform: translateY(-1px);
-    box-shadow: 0 0 20px rgba(255,217,59,.35);
+    background: linear-gradient(180deg, #d3e9ff, #b3d8ff) !important;
+    box-shadow: 0 6px 18px rgba(58,160,255,.35);
   }
+
+  /* ===== INPUTS ===== */
   .stTextInput > div > div > input,
   .stTextArea > div > div > textarea,
-  .stNumberInput > div > div > input {
-    background: rgba(3,6,12,.9) !important;
-    color: #fff !important;
-    border: 2px solid rgba(58,160,255,.5) !important;
+  .stNumberInput > div > div > input,
+  .stSelectbox > div > div > div,
+  div[data-baseweb="select"] > div {
+    background: #ffffff !important;
+    color: #0a2540 !important;
+    border: 2px solid #9cc8ff !important;
     border-radius: 10px !important;
     font-weight: 700 !important;
   }
   .stTextInput > div > div > input:focus,
   .stTextArea > div > div > textarea:focus,
   .stNumberInput > div > div > input:focus {
-    border-color: #ffd93b !important;
-    box-shadow: 0 0 0 3px rgba(255,217,59,.25) !important;
+    border-color: #3aa0ff !important;
+    box-shadow: 0 0 0 3px rgba(58,160,255,.25) !important;
   }
+  .stTextInput input::placeholder,
+  .stTextArea textarea::placeholder {
+    color: #7a9cbf !important;
+    opacity: 1 !important;
+  }
+
+  /* ===== FILE UPLOADER / CAMERA ===== */
   div[data-testid="stFileUploader"] {
-    background: rgba(3,6,12,.5) !important;
-    border: 2px dashed rgba(58,160,255,.5) !important;
+    background: #ffffff !important;
+    border: 2px dashed #3aa0ff !important;
     border-radius: 12px !important;
     padding: 12px !important;
+  }
+  div[data-testid="stFileUploader"] * {
+    color: #06357a !important;
+  }
+
+  /* ===== ALERTS ===== */
+  .stAlert {
+    border-radius: 12px !important;
+    border-width: 2px !important;
+  }
+  div[data-testid="stAlert"] {
+    background: #ffffff !important;
+    color: #0a2540 !important;
+  }
+
+  /* ===== TABS ===== */
+  button[data-baseweb="tab"] {
+    background: #eaf4ff !important;
+    color: #06357a !important;
+    border: 1.5px solid #9cc8ff !important;
+    border-radius: 10px 10px 0 0 !important;
+    font-weight: 800 !important;
+  }
+  button[data-baseweb="tab"][aria-selected="true"] {
+    background: #ffffff !important;
+    color: #1060a0 !important;
+    border-bottom-color: #3aa0ff !important;
+  }
+
+  /* ===== SPINNER / CAPTION ===== */
+  .stSpinner > div { border-top-color: #3aa0ff !important; }
+  .stCaption, div[data-testid="stCaptionContainer"] {
+    color: #35608f !important;
   }
 </style>
 """
@@ -244,18 +343,13 @@ st.markdown(CSS, unsafe_allow_html=True)
 # -----------------------------------------------------------------------------
 def init_state():
     defaults = {
-        # API settings
         "api_provider": "google",
         "api_key": "",
         "api_model": "",
         "api_verified": False,
-
-        # grading setup
         "answer_key": "",
         "coefficient": 1,
         "max_score": 20,
-
-        # AI result
         "ai_done": False,
         "ai_points": None,
         "ai_max": 20,
@@ -264,8 +358,6 @@ def init_state():
         "ai_overall_feedback": "",
         "ai_per_question": [],
         "ai_raw": "",
-
-        # teacher
         "student_name": "",
         "subject": "",
         "history": [],
@@ -278,7 +370,7 @@ def init_state():
 init_state()
 
 # -----------------------------------------------------------------------------
-# DEFAULT MODELS PER PROVIDER
+# MODEL OPTIONS
 # -----------------------------------------------------------------------------
 PROVIDER_MODELS = {
     "google": [
@@ -305,121 +397,9 @@ PROVIDER_LABELS = {
 }
 
 # -----------------------------------------------------------------------------
-# HEADER
-# -----------------------------------------------------------------------------
-st.markdown(
-    """
-    <div class="gl-header">
-      <div class="gl-brand">GRADELENS AI</div>
-      <div class="gl-tagline">📷 Real AI Vision · Coefficient-Based · Teacher-Controlled</div>
-      <div class="gl-credit">
-        BUILT BY GESNER DESLANDES · SOFTWARE ENGINEER
-        <small>
-          📞 <a href="tel:+50947385663">(509)-47385663</a> &nbsp;·&nbsp;
-          ✉️ <a href="mailto:deslandes78@gmail.com">deslandes78@gmail.com</a>
-        </small>
-      </div>
-    </div>
-    """,
-    unsafe_allow_html=True,
-)
-
-# -----------------------------------------------------------------------------
-# SIDEBAR — API CONFIGURATION
-# -----------------------------------------------------------------------------
-with st.sidebar:
-    st.markdown("### 🔑 AI Configuration")
-    st.caption("Your API key is stored **only in this browser session**. "
-               "It is never saved or shared.")
-
-    provider = st.selectbox(
-        "AI Provider",
-        options=list(PROVIDER_MODELS.keys()),
-        format_func=lambda k: PROVIDER_LABELS[k],
-        index=0,
-        key="gl_provider",
-    )
-
-    model_options = PROVIDER_MODELS[provider]
-    model = st.selectbox(
-        "Model",
-        options=model_options,
-        index=0,
-        key="gl_model",
-    )
-
-    api_key_input = st.text_input(
-        "API Key",
-        type="password",
-        value=st.session_state.api_key,
-        placeholder="Paste your API key here",
-        key="gl_api_key_input",
-    )
-
-    col_v, col_c = st.columns(2)
-    with col_v:
-        if st.button("✅ Verify", use_container_width=True):
-            if not api_key_input.strip():
-                st.error("Enter an API key first.")
-            else:
-                with st.spinner("Verifying…"):
-                    ok, msg = _verify_api_key(provider, api_key_input.strip(), model)
-                    if ok:
-                        st.session_state.api_key = api_key_input.strip()
-                        st.session_state.api_provider = provider
-                        st.session_state.api_model = model
-                        st.session_state.api_verified = True
-                        st.success("✅ Key verified")
-                    else:
-                        st.session_state.api_verified = False
-                        st.error(f"❌ {msg}")
-    with col_c:
-        if st.button("🗑 Clear", use_container_width=True):
-            st.session_state.api_key = ""
-            st.session_state.api_verified = False
-            st.rerun()
-
-    if st.session_state.api_verified:
-        st.markdown(
-            f"""
-            <div class="gl-ok">
-              🟢 <b>Active provider:</b> {PROVIDER_LABELS.get(provider,'')}<br>
-              <b>Model:</b> {st.session_state.api_model}
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
-    else:
-        st.markdown(
-            """
-            <div class="gl-warn">
-              ⚠️ No API key verified. The app will run in <b>DEMO mode</b>
-              (simulated grade). Add a key to enable real AI grading.
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
-
-    st.markdown("---")
-    st.markdown("### 💡 Where to get a key")
-    st.markdown(
-        """
-        - **Google Gemini** (free tier): [aistudio.google.com](https://aistudio.google.com/app/apikey)
-        - **OpenAI**: [platform.openai.com/api-keys](https://platform.openai.com/api-keys)
-        - **Anthropic**: [console.anthropic.com](https://console.anthropic.com/settings/keys)
-        """
-    )
-    st.caption(
-        "💵 Cost estimate: ~$0.01–$0.05 per sheet graded. "
-        "Gemini Flash has a generous free tier."
-    )
-
-
-# -----------------------------------------------------------------------------
-# API HELPERS
+# HELPERS
 # -----------------------------------------------------------------------------
 def _verify_api_key(provider: str, key: str, model: str):
-    """Send a tiny test request to verify the key works. Returns (ok, message)."""
     try:
         if provider == "openai":
             from openai import OpenAI
@@ -450,11 +430,9 @@ def _verify_api_key(provider: str, key: str, model: str):
 
 
 def _image_to_base64(image_file) -> tuple[str, str]:
-    """Return (base64_str, mime_type)."""
     img = Image.open(image_file)
     if img.mode != "RGB":
         img = img.convert("RGB")
-    # Resize if too big (keeps cost down, speeds up)
     max_dim = 1600
     if max(img.size) > max_dim:
         ratio = max_dim / max(img.size)
@@ -505,17 +483,13 @@ RETURN JSON with EXACTLY this structure:
 
 
 def _extract_json(text: str) -> dict:
-    """Robustly extract the first JSON object from a text response."""
     text = text.strip()
-    # Strip markdown fences
     text = re.sub(r"^```(?:json)?\s*", "", text)
     text = re.sub(r"\s*```$", "", text)
-    # Try direct parse
     try:
         return json.loads(text)
     except Exception:
         pass
-    # Fall back: find first { ... last }
     start = text.find("{")
     end = text.rfind("}")
     if start != -1 and end != -1 and end > start:
@@ -526,16 +500,14 @@ def _extract_json(text: str) -> dict:
     raise ValueError("Could not parse JSON from AI response.")
 
 
-def analyze_sheet_real(image_file, answer_key: str, max_score: int,
-                      coefficient: int, subject: str):
-    """Call the configured AI provider with vision. Returns parsed dict."""
+def analyze_sheet_real(image_file, answer_key, max_score, coefficient, subject):
     provider = st.session_state.api_provider
     key = st.session_state.api_key
     model = st.session_state.api_model
 
     b64, mime = _image_to_base64(image_file)
     prompt = PROMPT_TEMPLATE.format(
-        answer_key=answer_key or "(no answer key provided — grade on correctness in general)",
+        answer_key=answer_key or "(no answer key — grade on general correctness)",
         max_score=max_score,
         coefficient=coefficient,
         subject=subject or "—",
@@ -591,8 +563,7 @@ def analyze_sheet_real(image_file, answer_key: str, max_score: int,
     return _extract_json(raw), raw
 
 
-def analyze_sheet_demo(max_score: int, coefficient: int):
-    """Demo fallback when no API key is set."""
+def analyze_sheet_demo(max_score, coefficient):
     ratio = random.uniform(0.70, 0.95)
     points = round(max_score * ratio)
     if coefficient >= 3:
@@ -603,7 +574,8 @@ def analyze_sheet_demo(max_score: int, coefficient: int):
         "confidence": random.randint(88, 97),
         "overall_feedback": (
             "Working is mostly complete. Minor errors on the final steps. "
-            "Review the last section before the next exam. (DEMO MODE — no real analysis.)"
+            "Review the last section before the next exam. "
+            "(DEMO MODE — no real analysis.)"
         ),
         "per_question": [
             {
@@ -629,12 +601,113 @@ def analyze_sheet_demo(max_score: int, coefficient: int):
 
 
 # -----------------------------------------------------------------------------
+# HEADER
+# -----------------------------------------------------------------------------
+st.markdown(
+    """
+    <div class="gl-header">
+      <div class="gl-brand">GRADELENS AI</div>
+      <div class="gl-tagline">📷 Real AI Vision · Coefficient-Based · Teacher-Controlled</div>
+      <div class="gl-credit">
+        BUILT BY GESNER DESLANDES · SOFTWARE ENGINEER
+        <small>
+          📞 <a href="tel:+50947385663">(509)-47385663</a> &nbsp;·&nbsp;
+          ✉️ <a href="mailto:deslandes78@gmail.com">deslandes78@gmail.com</a>
+        </small>
+      </div>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+
+# -----------------------------------------------------------------------------
+# SIDEBAR — API CONFIG
+# -----------------------------------------------------------------------------
+with st.sidebar:
+    st.markdown("### 🔑 AI Configuration")
+    st.caption("Your API key is stored **only in this browser session**.")
+
+    provider = st.selectbox(
+        "AI Provider",
+        options=list(PROVIDER_MODELS.keys()),
+        format_func=lambda k: PROVIDER_LABELS[k],
+        index=0,
+        key="gl_provider",
+    )
+
+    model_options = PROVIDER_MODELS[provider]
+    model = st.selectbox("Model", options=model_options, index=0, key="gl_model")
+
+    api_key_input = st.text_input(
+        "API Key",
+        type="password",
+        value=st.session_state.api_key,
+        placeholder="Paste your API key here",
+        key="gl_api_key_input",
+    )
+
+    col_v, col_c = st.columns(2)
+    with col_v:
+        if st.button("✅ Verify", use_container_width=True):
+            if not api_key_input.strip():
+                st.error("Enter an API key first.")
+            else:
+                with st.spinner("Verifying…"):
+                    ok, msg = _verify_api_key(provider, api_key_input.strip(), model)
+                    if ok:
+                        st.session_state.api_key = api_key_input.strip()
+                        st.session_state.api_provider = provider
+                        st.session_state.api_model = model
+                        st.session_state.api_verified = True
+                        st.success("✅ Key verified")
+                    else:
+                        st.session_state.api_verified = False
+                        st.error(f"❌ {msg}")
+    with col_c:
+        if st.button("🗑 Clear", use_container_width=True):
+            st.session_state.api_key = ""
+            st.session_state.api_verified = False
+            st.rerun()
+
+    if st.session_state.api_verified:
+        st.markdown(
+            f"""
+            <div class="gl-ok">
+              🟢 <b>Active:</b> {PROVIDER_LABELS.get(provider,'')}<br>
+              <b>Model:</b> {st.session_state.api_model}
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+    else:
+        st.markdown(
+            """
+            <div class="gl-warn">
+              ⚠️ No API key verified. Running in <b>DEMO mode</b>.
+              Add a key to enable real AI grading.
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+    st.markdown("---")
+    st.markdown("### 💡 Where to get a key")
+    st.markdown(
+        """
+        - **Google Gemini** (free tier): [aistudio.google.com](https://aistudio.google.com/app/apikey)
+        - **OpenAI**: [platform.openai.com](https://platform.openai.com/api-keys)
+        - **Anthropic**: [console.anthropic.com](https://console.anthropic.com/settings/keys)
+        """
+    )
+    st.caption("💵 ~$0.01–$0.05 per sheet graded · Gemini Flash has free tier.")
+
+
+# -----------------------------------------------------------------------------
 # STEP 1 — SETUP
 # -----------------------------------------------------------------------------
 st.markdown(
     '<div class="gl-card"><div class="gl-card-title">'
-    '⚙️ Step 1 · Exam / Homework Setup + Answer Key'
-    '</div>',
+    '⚙️ Step 1 · Exam Setup + Answer Key</div>',
     unsafe_allow_html=True,
 )
 
@@ -663,8 +736,7 @@ answer_key = st.text_area(
         "Q1: x = 7\n"
         "Q2: 2x + 3 = 11, so x = 4\n"
         "Q3a: derivative = 3x²\n"
-        "Q3b: derivative = 6x\n"
-        "..."
+        "Q3b: derivative = 6x"
     ),
     height=160,
     key="gl_answer_key",
@@ -675,7 +747,7 @@ st.markdown(
     f"""
     <div class="gl-warn">
       📌 Setup: Coefficient <b>×{coefficient}</b> · Max <b>{max_score}</b> points ·
-      Answer key: <b>{"provided" if answer_key.strip() else "NOT provided — AI will grade on general correctness"}</b>
+      Answer key: <b>{"provided" if answer_key.strip() else "NOT provided"}</b>
     </div>
     """,
     unsafe_allow_html=True,
@@ -687,17 +759,15 @@ st.markdown('</div>', unsafe_allow_html=True)
 # -----------------------------------------------------------------------------
 st.markdown(
     '<div class="gl-card"><div class="gl-card-title">'
-    '📷 Step 2 · Capture the Answer Sheet'
-    '</div>',
+    '📷 Step 2 · Capture the Answer Sheet</div>',
     unsafe_allow_html=True,
 )
 st.markdown(
     """
     <div class="gl-tip">
-      📱 <b>Tip:</b> Use the <b>rear camera</b> to photograph a paper sheet.
-      On the <b>Quick Capture</b> tab, tap the small flip icon ↺ inside the
-      camera preview. On the <b>Native Camera</b> tab, your phone's own
-      camera app opens with a proper flip button.
+      📱 <b>Tip:</b> Use the <b>rear camera</b> for a paper sheet.
+      On <b>Quick Capture</b>, tap the flip icon ↺ inside the camera preview.
+      On <b>Native Camera</b>, your phone's own camera app opens with a proper flip button.
     </div>
     """,
     unsafe_allow_html=True,
@@ -725,7 +795,7 @@ with tab2:
 st.markdown('</div>', unsafe_allow_html=True)
 
 # -----------------------------------------------------------------------------
-# STEP 3 — REAL AI ANALYSIS
+# STEP 3 — AI ANALYSIS
 # -----------------------------------------------------------------------------
 if photo_file is not None:
     st.markdown(
@@ -750,13 +820,11 @@ if photo_file is not None:
         )
     else:
         st.warning(
-            "⚠️ Running in **DEMO mode** — no API key verified. "
-            "Add a key in the sidebar to enable real AI grading."
+            "⚠️ **DEMO mode** — add a key in the sidebar to enable real AI grading."
         )
 
     if st.button("🔍 Analyze Sheet & Compute Grade",
                  use_container_width=True, key="gl_analyze"):
-
         with st.spinner("AI is reading the sheet and grading…"):
             try:
                 if st.session_state.api_verified:
@@ -821,7 +889,6 @@ if photo_file is not None:
             unsafe_allow_html=True,
         )
 
-        # Per-question breakdown
         if st.session_state.ai_per_question:
             st.markdown("##### 📋 Per-Question Breakdown")
             for q in st.session_state.ai_per_question:
