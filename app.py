@@ -1,6 +1,6 @@
 # app.py
 # =============================================================================
-# GRADELENS AI v2 — Teacher's Quick Grading Assistant (Coefficient-Based)
+# GRADELENS AI v3 — Dual Camera Mode + Coefficient-Based Grading
 # Built by Gesner Deslandes · Software Engineer
 # Contact Info : (509)-47385663 · Email : deslandes78@gmail.com
 #
@@ -44,21 +44,16 @@ CSS = """
       linear-gradient(180deg, rgba(24,18,6,.98), rgba(8,6,3,.98));
     border: 3px solid #ffd93b;
     box-shadow: 0 20px 60px rgba(0,0,0,.9), 0 0 60px rgba(255,217,59,.20);
-    text-align: center;
-    margin-bottom: 18px;
-    position: relative;
-    overflow: hidden;
+    text-align: center; margin-bottom: 18px;
+    position: relative; overflow: hidden;
   }
   .gl-brand {
     font-family: Georgia, serif;
     font-size: clamp(1.6rem, 5vw, 2.4rem);
-    font-weight: 900;
-    letter-spacing: 6px;
+    font-weight: 900; letter-spacing: 6px;
     background: linear-gradient(90deg,#ffd93b,#ff8a2b,#ffd93b,#a86bff,#ffd93b);
     background-size: 200% 100%;
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
+    -webkit-background-clip: text; background-clip: text; color: transparent;
     margin: 0 0 6px;
   }
   .gl-tagline {
@@ -77,8 +72,7 @@ CSS = """
   .gl-credit a { color: #00e5ff; text-decoration: none; border-bottom: 1px dotted #00e5ff; }
 
   .gl-card {
-    padding: 18px 20px;
-    border-radius: 16px;
+    padding: 18px 20px; border-radius: 16px;
     background: linear-gradient(180deg, rgba(8,14,22,.98), rgba(4,7,12,.98));
     border: 2px solid #1c2636;
     box-shadow: 0 14px 36px rgba(0,0,0,.65);
@@ -92,23 +86,27 @@ CSS = """
   }
 
   .gl-warn {
-    padding: 12px 14px;
-    border-radius: 10px;
+    padding: 12px 14px; border-radius: 10px;
     background: rgba(255,176,32,.08);
     border: 1.5px solid rgba(255,176,32,.4);
     color: #ffd9a0;
     font-family: 'Courier New', monospace;
-    font-size: .78rem;
-    line-height: 1.7;
-    margin-bottom: 12px;
+    font-size: .78rem; line-height: 1.7; margin-bottom: 12px;
+  }
+
+  .gl-tip {
+    padding: 12px 14px; border-radius: 10px;
+    background: rgba(0,229,255,.06);
+    border: 1.5px solid rgba(0,229,255,.35);
+    color: #b4f2ff;
+    font-family: 'Courier New', monospace;
+    font-size: .78rem; line-height: 1.7; margin-bottom: 12px;
   }
 
   .gl-ai-box {
-    padding: 16px;
-    border-radius: 14px;
+    padding: 16px; border-radius: 14px;
     background: linear-gradient(180deg, rgba(168,107,255,.10), rgba(168,107,255,.02));
-    border: 2px solid rgba(168,107,255,.4);
-    margin-bottom: 14px;
+    border: 2px solid rgba(168,107,255,.4); margin-bottom: 14px;
   }
   .gl-ai-head { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
   .gl-ai-avatar {
@@ -157,26 +155,19 @@ CSS = """
   }
 
   .gl-final-box {
-    padding: 20px;
-    border-radius: 14px;
+    padding: 20px; border-radius: 14px;
     background: linear-gradient(180deg, rgba(255,217,59,.12), rgba(255,217,59,.02));
     border: 2px solid rgba(255,217,59,.6);
-    text-align: center;
-    margin: 14px 0;
+    text-align: center; margin: 14px 0;
   }
   .gl-final-label {
-    font-family: 'Courier New', monospace;
-    font-size: .72rem;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: #ffe680;
-    margin-bottom: 6px;
+    font-family: 'Courier New', monospace; font-size: .72rem;
+    letter-spacing: 2px; text-transform: uppercase;
+    color: #ffe680; margin-bottom: 6px;
   }
   .gl-final-value {
-    font-family: Georgia, serif;
-    font-size: 2.4rem;
-    font-weight: 900;
-    color: #ffd93b;
+    font-family: Georgia, serif; font-size: 2.4rem;
+    font-weight: 900; color: #ffd93b;
     text-shadow: 0 0 20px rgba(255,217,59,.6);
   }
 
@@ -212,8 +203,7 @@ CSS = """
   }
   .stTextInput > div > div > input,
   .stTextArea > div > div > textarea,
-  .stNumberInput > div > div > input,
-  .stSelectbox > div > div > div {
+  .stNumberInput > div > div > input {
     background: rgba(3,6,12,.9) !important;
     color: #fff !important;
     border: 2px solid rgba(58,160,255,.5) !important;
@@ -226,6 +216,14 @@ CSS = """
     border-color: #ffd93b !important;
     box-shadow: 0 0 0 3px rgba(255,217,59,.25) !important;
   }
+
+  /* File uploader styled */
+  div[data-testid="stFileUploader"] {
+    background: rgba(3,6,12,.5) !important;
+    border: 2px dashed rgba(58,160,255,.5) !important;
+    border-radius: 12px !important;
+    padding: 12px !important;
+  }
 </style>
 """
 st.markdown(CSS, unsafe_allow_html=True)
@@ -235,13 +233,12 @@ st.markdown(CSS, unsafe_allow_html=True)
 # -----------------------------------------------------------------------------
 def init_state():
     defaults = {
-        "photo_taken": False,
         "ai_done": False,
         "ai_points": None,
+        "ai_max": 20,
+        "ai_coefficient": 1,
         "ai_confidence": None,
         "ai_lines": [],
-        "coefficient": 1,
-        "max_score": 20,
         "student_name": "",
         "subject": "",
         "history": [],
@@ -274,70 +271,40 @@ st.markdown(
 )
 
 # -----------------------------------------------------------------------------
-# CAMERA ACCESS NOTICE (helps if the phone doesn't open the camera)
-# -----------------------------------------------------------------------------
-with st.expander("⚠️ Camera not working on your phone? Tap here for help"):
-    st.markdown(
-        """
-        **Mobile browsers block camera access on non-secure pages.**
-        Here's how to fix it:
-
-        1. **Make sure the URL starts with `https://`** — Streamlit Cloud
-           always uses HTTPS, so the camera works there automatically.
-        2. If you're testing on a **local network** (like `http://192.168.x.x`),
-           the phone **will not** open the camera. Use Streamlit Cloud instead.
-        3. On iPhone, open the app in **Safari** (not Chrome) — Safari is the
-           only browser on iOS that supports the camera input reliably.
-        4. When the browser asks for permission, tap **Allow**.
-        5. If you still see a black screen, tap the **camera icon** inside the
-           black frame — Streamlit opens the camera on tap.
-        """
-    )
-
-# -----------------------------------------------------------------------------
-# STEP 1 — COEFFICIENT & GRADING SETUP (BEFORE CAPTURE)
+# STEP 1 — COEFFICIENT SETUP
 # -----------------------------------------------------------------------------
 st.markdown(
     '<div class="gl-card"><div class="gl-card-title">'
-    '⚙️ Step 1 · Exam / Homework Setup (Coefficient)'
+    '⚙️ Step 1 · Exam / Homework Setup'
     '</div>',
     unsafe_allow_html=True,
-)
-st.caption(
-    "Enter the coefficient and maximum score **before** capturing the photo. "
-    "The AI will use these values to compute the grade."
 )
 
 col1, col2, col3 = st.columns([2, 2, 1])
 with col1:
     coefficient = st.number_input(
         "Coefficient", min_value=1, max_value=10, value=1, step=1,
-        help="Weight of this exam in the final average (e.g. 1, 2, 3, 4).",
+        help="Weight of this exam in the final average.",
         key="gl_coef",
     )
 with col2:
     max_score = st.number_input(
         "Maximum Score", min_value=1, max_value=100, value=20, step=1,
-        help="Total points possible on this exam (e.g. 20, 100).",
+        help="Total points possible on this exam.",
         key="gl_max",
     )
 with col3:
     st.markdown("<div style='height:26px;'></div>", unsafe_allow_html=True)
     if st.button("↺ Reset", use_container_width=True, key="gl_reset_setup"):
-        st.session_state.photo_taken = False
-        st.session_state.ai_done = False
-        st.session_state.ai_points = None
-        st.session_state.ai_confidence = None
-        st.session_state.ai_lines = []
+        for k in ["ai_done", "ai_points", "ai_confidence", "ai_lines"]:
+            st.session_state[k] = [] if k == "ai_lines" else (None if k != "ai_done" else False)
         st.rerun()
 
 st.markdown(
     f"""
     <div class="gl-warn">
       📌 <b>Current setup :</b> Coefficient <b>×{coefficient}</b> ·
-      Maximum score <b>{max_score}</b> points.<br>
-      The AI grade will be computed out of <b>{max_score}</b>, then weighted
-      by the coefficient for the final average.
+      Maximum score <b>{max_score}</b> points.
     </div>
     """,
     unsafe_allow_html=True,
@@ -345,7 +312,7 @@ st.markdown(
 st.markdown('</div>', unsafe_allow_html=True)
 
 # -----------------------------------------------------------------------------
-# STEP 2 — CAMERA
+# STEP 2 — DUAL CAMERA (front + rear)
 # -----------------------------------------------------------------------------
 st.markdown(
     '<div class="gl-card"><div class="gl-card-title">'
@@ -353,17 +320,71 @@ st.markdown(
     '</div>',
     unsafe_allow_html=True,
 )
-st.caption("Tap the black frame to open the camera, then click **Take Photo**.")
 
-photo = st.camera_input("Camera", key="gl_camera", label_visibility="collapsed")
+st.markdown(
+    """
+    <div class="gl-tip">
+      📱 <b>Which mode should I use?</b><br>
+      • <b>Quick Capture</b> — opens Streamlit's built-in camera.<br>
+      • <b>Use Phone Camera</b> — opens your phone's native camera app
+      (with flip button, zoom, flash — everything).<br>
+      <b>To photograph a paper sheet, use the rear camera.</b> Either tap the
+      flip icon ↺ in the browser's camera preview, or use the native camera
+      mode which has a proper flip button.
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+
+camera_tab1, camera_tab2 = st.tabs([
+    "📸 Quick Capture (Streamlit)",
+    "📁 Use Phone Camera (Native)",
+])
+
+photo_bytes = None
+
+with camera_tab1:
+    st.caption(
+        "Tap the black frame to open the camera. Look for the small **flip icon ↺** "
+        "in the corner of the camera preview — tap it to switch to the **rear camera**."
+    )
+    quick_photo = st.camera_input(
+        "Quick Camera",
+        key="gl_camera",
+        label_visibility="collapsed",
+    )
+    if quick_photo is not None:
+        photo_bytes = quick_photo
+
+with camera_tab2:
+    st.caption(
+        "Tapping below opens **your phone's native camera app** — the same one "
+        "you use to take regular photos. It has a **flip button** to switch "
+        "between front and rear camera. Take the photo, then it uploads here."
+    )
+    native_photo = st.file_uploader(
+        "Take or upload a photo",
+        type=["jpg", "jpeg", "png", "heic", "heif", "webp"],
+        key="gl_upload",
+        label_visibility="collapsed",
+    )
+    if native_photo is not None:
+        photo_bytes = native_photo
 
 st.markdown('</div>', unsafe_allow_html=True)
 
 # -----------------------------------------------------------------------------
 # STEP 3 — AI ANALYSIS
 # -----------------------------------------------------------------------------
-if photo is not None:
-    st.session_state.photo_taken = True
+if photo_bytes is not None:
+    # Show the captured image
+    st.markdown(
+        '<div class="gl-card"><div class="gl-card-title">'
+        '🖼️ Captured Sheet</div>',
+        unsafe_allow_html=True,
+    )
+    st.image(photo_bytes, use_container_width=True)
+    st.markdown('</div>', unsafe_allow_html=True)
 
     st.markdown(
         '<div class="gl-card"><div class="gl-card-title">'
@@ -380,12 +401,9 @@ if photo is not None:
                 import time
                 time.sleep(1.2)
 
-                # AI computes a realistic grade based on coefficient + max
-                ratio = random.uniform(0.70, 0.95)   # between 70% and 95%
+                ratio = random.uniform(0.70, 0.95)
                 points = round(max_score * ratio)
 
-                # Bonus: grade adjustment based on coefficient weight
-                # (heavier coefficients get slightly stricter grading)
                 if coefficient >= 3:
                     points = max(1, points - 1)
 
@@ -403,14 +421,10 @@ if photo is not None:
                     f"<span style='color:#d8baff'>Teacher decision required.</span>",
                 ]
                 st.session_state.ai_done = True
-
     with b2:
-        if st.button("↺ Clear", use_container_width=True, key="gl_clear"):
-            st.session_state.photo_taken = False
-            st.session_state.ai_done = False
-            st.session_state.ai_points = None
-            st.session_state.ai_confidence = None
-            st.session_state.ai_lines = []
+        if st.button("🆕 New Scan", use_container_width=True, key="gl_new_scan"):
+            for k in ["ai_done", "ai_points", "ai_confidence", "ai_lines"]:
+                st.session_state[k] = [] if k == "ai_lines" else (None if k != "ai_done" else False)
             st.rerun()
 
     if st.session_state.ai_done:
@@ -453,8 +467,8 @@ if photo is not None:
         )
 
         st.info(
-            "✍️ **Teacher step:** Now write **"
-            f"{pts}/{maxs}** on the student's paper, then confirm below."
+            f"✍️ **Teacher step:** Write **{pts}/{maxs}** on the student's paper, "
+            "then confirm below."
         )
     else:
         st.info("Click **Analyze Photo & Compute Grade** to get an AI suggestion.")
@@ -490,7 +504,8 @@ if photo is not None:
     col_c, col_d = st.columns(2)
     with col_c:
         ai_value = st.text_input(
-            "AI Suggested (read-only)", value=default_ai_grade,
+            "AI Suggested (read-only)",
+            value=default_ai_grade,
             disabled=True, key="gl_ai_value",
         )
     with col_d:
@@ -506,7 +521,6 @@ if photo is not None:
         key="gl_comment", height=90,
     )
 
-    # Show the final highlighted grade box
     if teacher_grade.strip():
         st.markdown(
             f"""
@@ -522,7 +536,6 @@ if photo is not None:
             unsafe_allow_html=True,
         )
 
-    # Action buttons
     b1, b2, b3 = st.columns(3)
     with b1:
         if st.button("💾 Save Grade", use_container_width=True, key="gl_save"):
@@ -570,12 +583,9 @@ if photo is not None:
                 st.code(summary, language="text")
                 st.info("👆 Long-press the text above to copy it.")
     with b3:
-        if st.button("🆕 New Scan", use_container_width=True, key="gl_new"):
-            st.session_state.photo_taken = False
-            st.session_state.ai_done = False
-            st.session_state.ai_points = None
-            st.session_state.ai_confidence = None
-            st.session_state.ai_lines = []
+        if st.button("🆕 New Scan", use_container_width=True, key="gl_new_scan2"):
+            for k in ["ai_done", "ai_points", "ai_confidence", "ai_lines"]:
+                st.session_state[k] = [] if k == "ai_lines" else (None if k != "ai_done" else False)
             st.rerun()
 
     st.markdown('</div>', unsafe_allow_html=True)
